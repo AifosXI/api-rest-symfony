@@ -17,6 +17,12 @@ class EntrepriseController extends AbstractController
         $this->client = $client;
     }
 
+    #[Route('/companies', name: 'search_companies')]
+    public function index(): Response
+    {
+        return $this->render('entreprise/index.html.twig');
+    }
+
     #[Route('/search-company', name: 'search_company', methods: ['GET'])]
     public function getCompanyByName(Request $request) {
 
