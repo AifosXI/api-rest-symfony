@@ -46,15 +46,55 @@ class EntrepriseController extends AbstractController
 
         $siren = $request->get('siren');
 
+        $session = $request->getSession();
+
+        $session->set('entreprise', $siren);
+
         $companyJson = $this->client->request(
             'GET',
             'https://recherche-entreprises.api.gouv.fr/search?q=' . $siren
         );
 
+        $filename = 'entreprise_' . $siren . '.json';
+        $file = fopen($filename, 'w');
+        $txt = $companyJson->getContent();
+        fwrite($file, $txt);
+        fclose($file);
+
+
         $company = json_decode($companyJson->getContent());
 
         return $this->render('entreprise/show.html.twig', [
             'company' => $company,
+            'filename' => $filename
         ]);
+    }
+
+    #[Route('/entreprise/download', name: 'entreprise_download')]
+    public function downloadCompanyInfo(Request $request) {
+
+        $session = $request->getSession();
+
+        $filename = 'entreprise_' . $session->get('entreprise') . '.json ';
+
+        $url = realpath($filename);
+
+
+        if(is_file($filename))
+        {
+            $response = new Response();
+            $response->headers->set('Content-type', 'application/json');
+            $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
+            $response->setContent(file_get_contents($url));
+            $response->setStatusCode(200);
+            $response->headers->set('Content-Transfer-Encoding', 'binary');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+            return $response;
+        } else {
+            return $this->render('error.html.twig', [
+                'error' => 'Le fichier n\'existe pas',
+            ]);
+        }
     }
 }
