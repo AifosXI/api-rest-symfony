@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% if error %}
+        <p class="text-red-500 text-2xl text-center py-10">{{ error }}</p>
+    {% endif %}
+{% endblock %}

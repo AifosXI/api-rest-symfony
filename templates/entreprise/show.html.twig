@@ -15,4 +15,8 @@
         <p><span class="font-bold">Code Postal : </span> {{ company.siege.code_postal }}</p>
         <p><span class="font-bold">Complement adresse : </span> {{ company.siege.complement_adresse }}</p>
     </div>
+
+    <form action="{{ path('entreprise_download') }}" method="post">
+        <input type="submit" name="submit" value="Download" class="border border-black rounded-lg py-1 px-4 block mx-auto mt-4" />
+    </form>
 {% endblock %}
