@@ -34,4 +34,21 @@ class EntrepriseController extends AbstractController
             'companies' => $companies,
         ]);
     }
+
+    #[Route('/entreprise/{siren}', name: 'entreprise_siren', methods: ['GET'])]
+    public function getCompanyBySiren(Request $request) {
+
+        $siren = $request->get('siren');
+
+        $companyJson = $this->client->request(
+            'GET',
+            'https://recherche-entreprises.api.gouv.fr/search?q=' . $siren
+        );
+
+        $company = json_decode($companyJson->getContent());
+
+        return $this->render('entreprise/show.html.twig', [
+            'company' => $company,
+        ]);
+    }
 }

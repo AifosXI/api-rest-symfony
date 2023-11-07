@@ -18,6 +18,7 @@
         {% for company in companies.results %}
             <p>{{ company.nom_complet }}</p>
             <p>{{ company.siege.adresse }}</p>
+            <a href="{{ path('entreprise_siren', {'siren': company.siren}) }}">Consulter</a>
         {% endfor %}
     </div>
 {% endblock %}
