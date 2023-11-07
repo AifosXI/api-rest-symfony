@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% set company = company.results[0] %}
+
+{% block title %}{{ company.nom_complet }} !{% endblock %}
+
+{% block body %}
+    <h1>Entreprise : {{ company.nom_complet }}</h1>
+
+    {{ dump(company) }}
+{% endblock %}
