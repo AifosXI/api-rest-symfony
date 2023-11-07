@@ -4,7 +4,15 @@
 {% block title %}{{ company.nom_complet }} !{% endblock %}
 
 {% block body %}
-    <h1>Entreprise : {{ company.nom_complet }}</h1>
-
-    {{ dump(company) }}
+    <h1 class="text-center font-bold py-10 text-2xl">{{ company.nom_complet }}</h1>
+    <div class="flex flex-col border border-black w-1/2 mx-auto p-4 rounded-lg">
+        <p><span class="font-bold">Nom : </span> {{ company.nom_complet }} </p>
+        <p><span class="font-bold">Raison sociale : </span> {{ company.nom_raison_sociale }} </p>
+        <p><span class="font-bold">SIREN : </span> {{ company.siren }} </p>
+        <p><span class="font-bold">SIRET : </span> {{ company.siege.siret }} </p>
+        <p><span class="font-bold">Adresse : </span> {{ company.siege.adresse }}</p>
+        <p><span class="font-bold">Commune : </span> {{ company.siege.commune }}</p>
+        <p><span class="font-bold">Code Postal : </span> {{ company.siege.code_postal }}</p>
+        <p><span class="font-bold">Complement adresse : </span> {{ company.siege.complement_adresse }}</p>
+    </div>
 {% endblock %}
