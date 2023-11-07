@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+
+
+{% block body %}
+    <p>Rechercher une entreprise</p>
+    <form action="{{ path('search_company') }}" method="get">
+        <label for="company_name">Nom de l'entreprise</label>
+        <input type="text" placeholder="Nom d'une entreprise" name="company_name" id="company_name"/>
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <p>Entreprise</p>
+
+    <div>
+        {% for company in companies.results %}
+            <p>{{ company.nom_complet }}</p>
+            <p>{{ company.siege.adresse }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
