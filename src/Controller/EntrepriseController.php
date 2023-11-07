@@ -51,6 +51,11 @@ class EntrepriseController extends AbstractController
             'https://recherche-entreprises.api.gouv.fr/search?q=' . $siren
         );
 
+        $file = fopen('entreprise.json', 'w');
+        $txt = $companyJson->getContent();
+        fwrite($file, $txt);
+        fclose($file);
+
         $company = json_decode($companyJson->getContent());
 
         return $this->render('entreprise/show.html.twig', [
