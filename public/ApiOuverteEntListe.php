@@ -2,12 +2,6 @@
 
 namespace public;
 
-//var_dump($_SERVER['REQUEST_METHOD']);
-//var_dump($_SERVER['HTTP_ACCEPT']);
-//var_dump($_SERVER['CONTENT_TYPE']);
-//var_dump($_SERVER);
-//var_dump($_GET['siren']);
-
 if($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_GET['siren']))
 {
     $dir = __DIR__;
