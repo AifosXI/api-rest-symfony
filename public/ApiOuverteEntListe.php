@@ -2,41 +2,37 @@
 
 namespace public;
 
-//use Symfony\Component\Finder\Finder;
+var_dump($_SERVER['REQUEST_METHOD']);
+var_dump($_SERVER['HTTP_ACCEPT']);
 
-//$finder = new Finder();
-//$finder->files()->name('.json')->notName('entreprise_index.html.twig.json')->in(__DIR__ . '/public');
+if($_SERVER['REQUEST_METHOD'] === 'GET')
+{
+    $dir = __DIR__;
 
-$dir = __DIR__;
+    $files = scandir($dir);
 
-$files = scandir($dir);
+    $companiesFiles = [];
 
-$companiesFiles = [];
-
-if($files) {
-    foreach ($files as $file) {
-        $fileType = filetype($file);
-        if($fileType === 'file')
-        {
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if($ext === 'json')
+    if($files) {
+        foreach ($files as $file) {
+            $fileType = filetype($file);
+            if($fileType === 'file')
             {
-                if($file !== 'entreprise_index.html.twig.json' && $file !== 'entreprise.json')
+                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                if($ext === 'json')
                 {
-                    array_push($companiesFiles, $file);
+                    if($file !== 'entreprise_index.html.twig.json' && $file !== 'entreprise.json')
+                    {
+                        array_push($companiesFiles, $file);
+                    }
                 }
             }
         }
+        var_dump($companiesFiles);
+        return $companiesFiles;
     }
-    var_dump($companiesFiles);
-    return $companiesFiles;
+} else {
+    return http_response_code(405);
 }
 
-//if ($finder->hasResults()) {
-//    foreach ($finder as $file) {
-//        var_dump($file->getRealPath());
-//    }
-//}
-//var_dump('hello');
-//echo 'yes'
 ?>
