@@ -2,13 +2,13 @@
 
 namespace public;
 
-var_dump($_SERVER['REQUEST_METHOD']);
-var_dump($_SERVER['HTTP_ACCEPT']);
-var_dump($_SERVER['CONTENT_TYPE']);
+//var_dump($_SERVER['REQUEST_METHOD']);
+//var_dump($_SERVER['HTTP_ACCEPT']);
+//var_dump($_SERVER['CONTENT_TYPE']);
 //var_dump($_SERVER);
-var_dump($_GET);
+//var_dump($_GET['siren']);
 
-if($_SERVER['REQUEST_METHOD'] === 'GET')
+if($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_GET['siren']))
 {
     $dir = __DIR__;
 
@@ -31,7 +31,6 @@ if($_SERVER['REQUEST_METHOD'] === 'GET')
                 }
             }
         }
-        var_dump($companiesFiles);
         if($companiesFiles)
         {
             if($_SERVER['CONTENT_TYPE'] === 'application/json')
@@ -46,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET')
                 var_dump('csv format');
             }
             else {
-                echo 'Format non prit en compte';
+                echo 'Format non pris en compte';
                 return http_response_code(406);
             }
         }
@@ -55,8 +54,25 @@ if($_SERVER['REQUEST_METHOD'] === 'GET')
         echo 'Aucune entreprise enregistrée';
         return http_response_code(200);
     }
-} else {
-    echo 'Mauvais "verbe utilisé"';
+}
+elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['siren'])) {
+    $siren = $_GET['siren'];
+    $fileName = 'entreprise_' . $siren . '.json';
+    $isFile = is_file($fileName);
+
+    if(!$isFile)
+    {
+        echo 'Aucune entreprise avec ce SIREN';
+        return http_response_code(404);
+    }
+
+    $fileContent = file_get_contents($fileName);
+
+    echo $fileContent;
+    return http_response_code(200);
+}
+else {
+    echo 'Mauvais "verbe" utilisé';
     return http_response_code(405);
 }
 
