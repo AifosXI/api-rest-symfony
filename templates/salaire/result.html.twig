@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+
+
+{% block body %}
+    <div class="max-w-screen-2xl mt-10 mx-auto">
+        <h2 class="text-3xl font-bold my-4">Calcule Salaire</h2>
+
+        <table class="min-w-full border-collapse block md:table">
+            <thead class="block md:table-header-group">
+            <tr class="border table-row top-auto left-auto relative font-bold text-left text-sm bg-gray-300">
+                <th class="py-2 px-4 border table-cell">salaire net avant impôt </th>
+                <th class="py-2 px-4 border table-cell">gratification minimale (stage)</th>
+                <th class="py-2 px-4 border table-cell">salaire net avant impôt pour un.e alternant.e </th>
+                <th class="py-2 px-4 border table-cell">le salaire net avant impôt pour un CDD </th>
+            </tr>
+            </thead>
+            <tbody class="block md:table-row-group">
+            <tr class="border table-row">
+                <td class="py-2 px-4 border table-cell">{{ salary.cdi|number_format(2) }}</td>
+                <td class="py-2 px-4 border table-cell">{{ salary.stage|number_format(2) }}</td>
+                <td class="py-2 px-4 border table-cell">{{ salary.apprentis|number_format(2) }}</td>
+                <td class="py-2 px-4 border table-cell">{{ salary.cdd|number_format(2) }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
