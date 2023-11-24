@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+
+
+{% block body %}
+    <form action="{{ path('search_company') }}" method="get" class="text-center max-w-screen-lg mx-auto">
+        <h1 class="text-4xl font-bold my-4">Rechercher une entreprise</h1>
+        <div class="flex flex-col w-1/2 mx-auto">
+            <label for="company_name" class="italic text-left sr-only">Nom de l'entreprise</label>
+            <input type="text" placeholder="Nom de l'entreprise" name="company_name" id="company_name" class="p-2 rounded-lg"/>
+        </div>
+        <button type="submit" class="border border-black rounded-lg py-2 px-4 mt-4">Rechercher</button>
+    </form>
+    {% if companies is defined %}
+        <div class="max-w-screen-2xl mt-10 mx-auto">
+            <h2 class="text-3xl font-bold my-4">Entreprise(s) trouvée(s)</h2>
+
+            <table class="min-w-full border-collapse block md:table">
+                <thead class="block md:table-header-group">
+                <tr class="border table-row top-auto left-auto relative font-bold text-left text-sm bg-gray-300">
+                    <th class="py-2 px-4 border table-cell">Nom complet</th>
+                    <th class="py-2 px-4 border table-cell">Siren</th>
+                    <th class="py-2 px-4 border table-cell">Siret</th>
+                    <th class="py-2 px-4 border table-cell">Adresse (siège)</th>
+                    <th class="py-2 px-4 border table-cell">Commune (siège)</th>
+                    <th class="py-2 px-4 border table-cell">Code postal (siège)</th>
+                    <th class="py-2 px-4 border table-cell"></th>
+                </tr>
+                </thead>
+                <tbody class="block md:table-row-group">
+                {% for company in companies.results %}
+                    <tr class="border table-row">
+                        <td class="py-2 px-4 border table-cell">{{ company.nom_complet }}</td>
+                        <td class="py-2 px-4 border table-cell">{{ company.siren }}</td>
+                        <td class="py-2 px-4 border table-cell">{{ company.siege.siret }}</td>
+                        <td class="py-2 px-4 border table-cell">{{ company.siege.adresse }}</td>
+                        <td class="py-2 px-4 border table-cell">{{ company.siege.commune }}</td>
+                        <td class="py-2 px-4 border table-cell">{{ company.siege.code_postal }}</td>
+                        <td class="py-2 px-4 border table-cell">
+                            <a class="border border-black rounded-lg py-1 px-4 block" href="{{ path('entreprise_siren', {'siren': company.siren}) }}">Consulter</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    {% endif %}
+{% endblock %}
