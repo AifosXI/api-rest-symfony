@@ -26,6 +26,8 @@ class ApiProtegee extends AbstractController {
         $usernameRequest = $request->get('username');
         $passwordRequest = $request->get('password');
 
+        $postData = ['username' => $usernameRequest, 'password' => $passwordRequest];
+
         $authToken = base64_encode($username . ':' . $password);
 
         $ch = curl_init();
@@ -33,19 +35,21 @@ class ApiProtegee extends AbstractController {
         curl_setopt($ch, CURLOPT_URL, 'localhost:8000/login');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_HEADER, 'Authorization: Basic ' . $authToken);
-        curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Basic " . $authToken, 'Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password );
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 
         $response = curl_exec($ch);
 
         curl_close($ch);
 
-        if(!isset($_SERVER['PHP_AUTH_USER'])) {
-            var_dump('kc');
-        } else {
-            echo 'Hello ! ' . $_SERVER['PHP_AUTH_USER'];
-            echo 'PWD ! ' . $_SERVER['PHP_AUTH_PW'];
-        }
+//        if(!isset($_SERVER['PHP_AUTH_USER'])) {
+//            var_dump('kc');
+//        } else {
+//            echo 'Hello ! ' . $_SERVER['PHP_AUTH_USER'];
+//            echo 'PWD ! ' . $_SERVER['PHP_AUTH_PW'];
+//        }
+        var_dump($_SERVER['PHP_AUTH_USER']);
 
         var_dump($response);
     }
