@@ -97,4 +97,24 @@ class EntrepriseController extends AbstractController
             ]);
         }
     }
+
+    //Route who delete the file link to the entreprise
+    #[Route('/entreprise/delete/{siren}', name: 'entreprise_delete')]
+    public function deleteCompanyInfo(Request $request, int $siren) {
+
+        $fileName = 'entreprise_' . $request->get('siren') . '.json';
+
+
+        if(is_file($fileName))
+        {
+            unlink($fileName);
+            return $this->render('entreprise/delete.html.twig', [
+                'filename' => $fileName,
+            ]);
+        } else {
+            return $this->render('error.html.twig', [
+                'error' => 'Le fichier n\'existe pas',
+            ]);
+        }
+    }
 }
