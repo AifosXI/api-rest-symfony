@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -101,20 +102,25 @@ class EntrepriseController extends AbstractController
     //Route who delete the file link to the entreprise
     #[Route('/entreprise/delete/{siren}', name: 'entreprise_delete')]
     public function deleteCompanyInfo(Request $request, int $siren) {
+        if($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $fileName = 'entreprise_' . $request->get('siren') . '.json';
 
-        $fileName = 'entreprise_' . $request->get('siren') . '.json';
+            if(is_file($fileName))
+            {
+                unlink($fileName);
 
+                echo 'L\'entreprise a été supprimée';
+                http_response_code(200);
 
-        if(is_file($fileName))
-        {
-            unlink($fileName);
-            return $this->render('entreprise/delete.html.twig', [
-                'filename' => $fileName,
-            ]);
+                return $this->render('entreprise/delete.html.twig', [
+                    'filename' => $fileName,
+                ]);
+
+            } else {
+                throw new HttpException(Response::HTTP_NOT_FOUND,'Aucune entreprise avec ce SIREN', null);
+            }
         } else {
-            return $this->render('error.html.twig', [
-                'error' => 'Le fichier n\'existe pas',
-            ]);
+            throw new HttpException(Response::HTTP_METHOD_NOT_ALLOWED,'La méthode utilisée n\'est pas autorisée. Uniquement DELETE est autorisé', null);
         }
     }
 }
